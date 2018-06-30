@@ -1,5 +1,0 @@
-\i ~/.psqlrc
-
-set search_path = gameplay, history, public;
-
-\dt gameplay.*
