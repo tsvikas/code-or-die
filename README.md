@@ -16,14 +16,14 @@ Create a game...
 STORY
 =====
 
-In the year 10328, the Titanus people first ventured out from thir homeworld Titanus Earth. It was the year they discovered faster-than-light travel, through the warping of subspace. But barely had they sent their first expedition to what they would call New Earth, did Titanian scientists make two discoveries that would change the galaxy:
+In the year 10328, the Titanus people first ventured out from their homeworld Titanus Earth. It was the year they discovered faster-than-light travel, through the warping of subspace. But barely had they sent their first expedition to what they would call New Earth, did Titanian scientists make two discoveries that would change the galaxy:
 
-- the hyperrelay, a method of instanteous communication to any point in the galaxy
-- the beam motivator, a city-sized distortion generator that would allow near-instanteous transport along a tightly calibrated corridor of warped subspace
+- the hyperrelay, a method of instantaneous communication to any point in the galaxy
+- the beam motivator, a city-sized distortion generator that would allow near-instantaneous transport along a tightly calibrated corridor of warped subspace
 
 It was a time of great hope for the Titanian people. Dreaming of a pan-Galactic Titanian empire, the people of Titanus Earth joined together to face their destiny as a unified peoples.
 
-And little did they know... that the beam motivator, the tool that would enable them to grow and prosper, didn't merely warp subspace. With each warp, subspace would bend, it might tear, or it invert, but it would always eventually destory.
+And little did they know... that the beam motivator, the tool that would enable them to grow and prosper, didn't merely warp subspace. With each warp, subspace would bend, it might tear, or it invert, but it would always eventually be destoryed.
 
 And little did they know... they weren't the only explorers.
 
@@ -174,7 +174,7 @@ Additionally, if team controls solar system outpost, return:
 - all historical destination tuning parameters for this system's beam motivator
 - all tuning parameters for beam transits originating from this outpost (**TODO:** include this or not? these are historical tuning parameters and may be not be up-to-date)
 - IDs and names of all immediately adjacent systems, including FTL transit time
-- IDs and names of all beam destinations (**TODO:** include this or not? include transit history, too? how many ships transitted and at what time?)
+- IDs and names of all beam destinations (**TODO:** include this or not? include transit history, too? how many ships transmitted and at what time?)
 
 `http GET systems/names/`
 GET all convenience names for all systems.
@@ -183,7 +183,7 @@ GET all convenience names for all systems.
 PUT a convenience name on an systems. Team does not have to control an systems to give it a convenience name.
 
 `http POST system/<id:int|name:str>/tuning`
-PUT a new set of tuning paramters on an systems. Payload may indicate to use specific parameters or to generate random parameters.
+PUT a new set of tuning parameters on an systems. Payload may indicate to use specific parameters or to generate random parameters.
 
 `http GET system/<id:int|name:str>/orders`
 GET a controlled system's order queue.
@@ -247,7 +247,7 @@ travel via beam to destination, using provided tuning parameters
 `{ "order": "ftl", "destination": ID or NAME }`
 travel via beam to destination, using provided tuning parameters
 
-`{ "order": "sieze" }`
+`{ "order": "seize" }`
 attempt to seize control of solar system outpost currently stationed at
 
 `{ "order": "suicide" }`

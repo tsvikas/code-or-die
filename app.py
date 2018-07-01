@@ -91,7 +91,7 @@ def get_app(db):
           (TODO: include this or not? these are historical tuning parameters and may be not be up-to-date)
         * IDs and names of all immediately adjacent systems, including FTL transit time
         * IDs and names of all beam destinations
-          (TODO: include this or not? include transit history, too? how many ships transitted and at what time?)
+          (TODO: include this or not? include transit history, too? how many ships transmitted and at what time?)
         """
 
     @app.route('/system/<string:system>/name/', methods=['PUT'])
@@ -104,7 +104,7 @@ def get_app(db):
     @app.route('/system/<string:system>/tuning', methods=['POST'])
     @with_team_id
     def set_system_tuning(system: str):
-        """PUT a new set of tuning paramters on an systems.
+        """PUT a new set of tuning parameters on an systems.
         Payload may indicate to use specific parameters or to generate random parameters."""
         pass
 

@@ -16,7 +16,7 @@ def get_column(collection, column='_id'):
     return [r[column] for r in collection.find({}, [column])]
 
 
-##### init board #####
+# init board (routes & routes)
 db = MongoClient('localhost', 27017)['code-or-die']
 
 systems_graph = setup_board(12)
