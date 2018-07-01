@@ -459,18 +459,14 @@ def random_new_star():
     return " ".join([random.choice(GREEK_LETTERS), random.choice(CONSTELLATIONS)])
 
 
-def random_new_stars(n: int):
-    """return a shuffled list of `n` unique random star names."""
-    names = set()
-    while len(names) < n:
+def random_star_names(n_total: int, min_random=0):
+    """Return a shuffled list of `n_total` unique star names.
+    At least `min_random` of them will not be from the NAMED_STARS
+    """
+    n_named = min(n_total - min_random, len(NAMED_STARS))
+    names = set(random.sample(NAMED_STARS, n_named))
+    while len(names) < n_total:
         names.add(random_new_star())
     names = list(names)
-    return random.sample(names, n)
-
-
-def random_star_names(n_total: int, min_random=0):
-    n_named = min(n_total - min_random, len(NAMED_STARS))
-    n_random = n_total - n_named
-    names = random.sample(NAMED_STARS, n_named) + random_new_stars(n_random)
     random.shuffle(names)
     return names
