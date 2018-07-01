@@ -13,10 +13,15 @@ from stars import random_star_names
 
 # set-up systems
 def setup_board(seed=None):
-    NUMBER_OF_STARS = 50
-    ROUTES_ARGS = 2, 0.9
+    # game-play constants:
+    # TODO: a test case to check that
+    # setup_board(1) == setup_board(1) != setup_board(2)
+    number_of_stars = 50
 
-    random.seed(seed)
+    def get_graph(number_of_stars, seed=None):
+        return nx.generators.random_graphs.powerlaw_cluster_graph(
+            n=number_of_stars, m=2, p=0.9, seed=seed
+        )
 
     def get_distance():
         return random.uniform(3, 5)
@@ -26,34 +31,38 @@ def setup_board(seed=None):
             round((centrality / min_centrality) ** 2.5 * random.lognormvariate(0, 0.2))
         )
 
-    systems_graph = nx.relabel.convert_node_labels_to_integers(
-        nx.generators.random_graphs.powerlaw_cluster_graph(
-            NUMBER_OF_STARS, *ROUTES_ARGS, seed=seed
-        ),
-        1,
-    )
-    assert nx.is_connected(systems_graph)
+    # board generation
+    random.seed(seed)
+    while True:
+        systems_graph = nx.relabel.convert_node_labels_to_integers(
+            get_graph(number_of_stars, seed=seed), 1
+        )
+        if nx.is_connected(systems_graph):
+            break
+
+    # board metadata
     for system, name in zip(systems_graph.nodes, random_star_names(len(systems_graph))):
         systems_graph.nodes[system]['name'] = name
-
     for src in systems_graph:
         for dst in systems_graph[src]:
             systems_graph[src][dst]['distance'] = get_distance()
-    centrality = nx.algorithms.centrality.closeness_centrality(
+    centrality_dict = nx.algorithms.centrality.closeness_centrality(
         systems_graph, distance='distance'
     )
-    min_centrality = min(centrality.values())
     for system in systems_graph.nodes:
-        systems_graph.nodes[system]['centrality'] = centrality[system]
+        systems_graph.nodes[system]['centrality'] = centrality_dict[system]
         systems_graph.nodes[system]['production'] = get_production(
-            centrality[system], min_centrality
+            centrality_dict[system], min(centrality_dict.values())
         )
     return systems_graph
 
 
 def draw_map(systems_graph, ax=None):
+    # TODO: draw map random seed control?
     import matplotlib.pyplot as plt
 
+    if ax is None:
+        _f, ax = plt.subplots()
     nx.draw(
         systems_graph,
         node_color=[
@@ -74,12 +83,10 @@ def draw_map(systems_graph, ax=None):
         },
         ax=ax,
     )
+    plt.show()
+    return ax
 
 
 if __name__ == "__main__":
-    import matplotlib.pyplot as plt
-
-    systems_graph = setup_board()
-    _f, ax = plt.subplots()
-    draw_map(systems_graph, ax=ax)
-    plt.show()
+    systems_g = setup_board()
+    ax = draw_map(systems_g)
