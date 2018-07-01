@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 def get_column(collection, column='_id'):
     return [r[column] for r in collection.find({}, [column])]
 
+
 ##### init board #####
 db = MongoClient('localhost', 27017)['code-or-die']
 
@@ -29,7 +30,8 @@ systems.insert_many(
             name=systems_graph.nodes[system_id]['name'],
             is_destroyed=False,
             production=systems_graph.nodes[system_id]['production'],
-        ) for system_id in systems_graph.nodes
+        )
+        for system_id in systems_graph.nodes
     ]
 )
 
@@ -40,16 +42,19 @@ routes = db['routes']
 routes.insert_many(
     [
         dict(
-                system_ids=[system1_id, system2_id],
-                distance=systems_graph[system1_id][system2_id]['distance'],
-            )
-        for system1_id in systems_graph for system2_id in systems_graph[system1_id]
+            system_ids=[system1_id, system2_id],
+            distance=systems_graph[system1_id][system2_id]['distance'],
+        )
+        for system1_id in systems_graph
+        for system2_id in systems_graph[system1_id]
     ]
 )
 
 # add a beam for each system
 beams = db['beams']
-beams.insert_many([dict(system_id=system_id, is_repair_mode=False) for system_id in systems_ids])
+beams.insert_many(
+    [dict(system_id=system_id, is_repair_mode=False) for system_id in systems_ids]
+)
 
 # set random tuning for each beam
 db['tuning_params'].drop()
@@ -74,8 +79,10 @@ for team_id, system_id in zip(
     get_column(teams), random.sample(systems_ids, k=teams.count_documents({}))
 ):
     teams.update_one({'_id': team_id}, {'$set': dict(home_system=system_id)})
-    systems.update_one({'_id': system_id},
-                       {'$set': dict(controller_id=team_id, production=HOME_PLANET_PRODUCTION)})
+    systems.update_one(
+        {'_id': system_id},
+        {'$set': dict(controller_id=team_id, production=HOME_PLANET_PRODUCTION)},
+    )
 
 # set-up starting ships
 INITIAL_SHIPS = 5
@@ -86,11 +93,11 @@ for team_number, team_id in enumerate(get_column(teams)):
     ships.insert_many(
         [
             dict(
-                _id=team_number*INITIAL_SHIPS+i,
+                _id=team_number * INITIAL_SHIPS + i,
                 team_id=team_id,
                 src_system_id=system_id,
                 system_id=system_id,
-                destroyed=False
+                destroyed=False,
             )
             for i in range(INITIAL_SHIPS)
         ]

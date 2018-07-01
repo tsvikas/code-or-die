@@ -49,8 +49,15 @@ def get_app(db):
     def get_systems(team_id):
         """GET all systems currently controlled by team"""
         team_system_ids = get_column(systems.find({'controller_id': team_id}, ['_id']))
-        ships_system_ids = get_column(ships.find({'team_id': team_id}, ['system_id']), 'system_id')
-        route_system_ids = sum(get_column(routes.find({'system_ids': {'$in': team_system_ids}}), 'system_ids'), [])
+        ships_system_ids = get_column(
+            ships.find({'team_id': team_id}, ['system_id']), 'system_id'
+        )
+        route_system_ids = sum(
+            get_column(
+                routes.find({'system_ids': {'$in': team_system_ids}}), 'system_ids'
+            ),
+            [],
+        )
         system_ids = sorted(set(team_system_ids + ships_system_ids + route_system_ids))
         visible_systems = systems.find({'_id': {'$in': system_ids}})
         return jsonify(change_mongo_ids(list(visible_systems)))
