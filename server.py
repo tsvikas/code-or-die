@@ -8,7 +8,6 @@ from pymongo import MongoClient
 from app import get_app
 from board import setup_board
 
-logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
@@ -19,7 +18,7 @@ def get_column(collection, column='_id'):
 # init board (routes & routes)
 db = MongoClient('localhost', 27017)['code-or-die']
 
-systems_graph = setup_board(12)
+systems_graph = setup_board()
 
 db['systems'].drop()
 systems = db['systems']
@@ -117,6 +116,7 @@ ships_orders = db['ships_orders']
 
 
 if __name__ == '__main__':
+    logging.basicConfig(stream=sys.stdout, level=logging.INFO)
     app_server = PathInfoDispatcher({'/': get_app(db)})
     server = WSGIServer(('0.0.0.0', 5000), app_server, numthreads=150)
     try:
