@@ -52,6 +52,7 @@ def setup_board(seed=None):
 
 
 def draw_map(systems_graph, ax=None):
+    import matplotlib.pyplot as plt
     nx.draw(
         systems_graph,
         node_color=[
@@ -78,3 +79,4 @@ if __name__ == "__main__":
     systems_graph = setup_board()
     _f, ax = plt.subplots()
     draw_map(systems_graph, ax=ax)
+    plt.show()

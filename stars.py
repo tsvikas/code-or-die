@@ -461,8 +461,10 @@ def random_new_star():
 
 def random_new_stars(n: int):
     """return a shuffled list of `n` unique random star names."""
-    names = [random_new_star() for _ in range(n + 10)]
-    names = list(set(names))
+    names = set()
+    while len(names) < n:
+        names.add(random_new_star())
+    names = list(names)
     return random.sample(names, n)
 
 
