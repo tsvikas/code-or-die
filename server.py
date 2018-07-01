@@ -76,7 +76,7 @@ teams.insert_one(dict(_id=1, name='blue', token='BBBB'))
 # TODO: Make sure players are distant!
 HOME_PLANET_PRODUCTION = 3
 for team_id, system_id in zip(
-    get_column(teams), random.sample(systems_ids, k=teams.count_documents({}))
+    get_column(teams), random.sample(systems_ids, k=teams.count())
 ):
     teams.update_one({'_id': team_id}, {'$set': dict(home_system=system_id)})
     systems.update_one(
