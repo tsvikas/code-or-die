@@ -2,11 +2,11 @@ import logging
 import random
 import sys
 
-from pymongo import MongoClient
 from cheroot.wsgi import Server as WSGIServer, PathInfoDispatcher
+from pymongo import MongoClient
 
-from board import setup_board
 from app import get_app
+from board import setup_board
 
 logging.basicConfig(stream=sys.stdout, level=logging.INFO)
 logger = logging.getLogger(__name__)

@@ -1,5 +1,5 @@
-from logging import getLogger, INFO
 from functools import wraps
+from logging import getLogger, INFO
 
 from flask import Flask, request, jsonify
 
