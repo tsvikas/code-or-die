@@ -13,8 +13,8 @@ def change_mongo_ids(dataset):
     return dataset
 
 
-def get_column(dicts, cloumn='_id'):
-    return [d[cloumn] for d in dicts]
+def get_column(dicts, column='_id'):
+    return [d[column] for d in dicts]
 
 
 def get_app(db):
