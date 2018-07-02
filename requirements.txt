@@ -1,6 +1,6 @@
 networkx
 matplotlib
 flask
-cheroot
+waitress
 pymongo
 requests
