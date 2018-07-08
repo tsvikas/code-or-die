@@ -34,6 +34,11 @@ class DocumentFormatter(document.BaseDocument):
             ),
         )
 
+    @classmethod
+    def mongo_id(cls, **kwargs):
+        """return the ObjectId of a cls_id"""
+        return cls.objects.get(**kwargs).id
+
 
 class BaseDocument(document.Document, DocumentFormatter):
     """An helper abstract class with common methods"""
@@ -289,9 +294,7 @@ class System(BaseDocument):
             team_id: Team.objects.get(team_id=team_id)
             .ships.filter(**ships_filter)
             .count()
-            for team_id in Team.objects.filter(ships__match=ships_filter).distinct(
-                "team_id"
-            )
+            for team_id in Team.objects(ships__match=ships_filter).distinct("team_id")
         }
 
     # static controller data
@@ -324,6 +327,7 @@ class System(BaseDocument):
         default=lambda: [dict(action="new", time=datetime.datetime.now())],
         formatter=lambda l: "<{}: {!r}>".format(len(l), l[-1]["action"]),
     )
+
     controller = fields.ReferenceField("Team")
 
     def change_control(self, team_id, save=True):
@@ -337,7 +341,7 @@ class System(BaseDocument):
         self.history.append(
             dict(action="control", time=datetime.datetime.now(), team_id=team_id)
         )
-        self.controller = team_id
+        self.controller = Team.mongo_id(team_id=team_id)
         if save:
             self.save()
         return self
