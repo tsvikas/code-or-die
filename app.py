@@ -33,9 +33,13 @@ def get_app():
     def get_systems(team_id):
         """GET all systems currently controlled by team"""
         system_ids = set(
-            System.objects(controller=Team.mongo_id(team_id=team_id)).distinct('system_id')
+            System.objects(controller=Team.mongo_id(team_id=team_id)).distinct(
+                'system_id'
+            )
         ) | set(Team.objects(team_id=team_id).distinct('ships.location'))
-        return jsonify([System.objects.get(system_id=s).to_dict(team_id) for s in system_ids])
+        return jsonify(
+            [System.objects.get(system_id=s).to_dict(team_id) for s in system_ids]
+        )
 
     @app.route('/systems/<int:system_id>/', methods=['GET'])
     @with_team_id
