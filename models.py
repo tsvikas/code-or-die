@@ -1,8 +1,8 @@
 import datetime
 import secrets
 
-import mongoengine.base
-from mongoengine import fields
+import mongoengine
+from mongoengine import document, fields
 
 mongoengine.connect("code-or-die")
 
@@ -10,7 +10,7 @@ mongoengine.connect("code-or-die")
 # TODO: system_id -> reference ?
 
 
-class DocumentFormatter(mongoengine.base.BaseDocument):
+class DocumentFormatter(document.BaseDocument):
     """An helper abstract class to str() mongoengine documents"""
 
     def __repr__(self):
@@ -35,7 +35,7 @@ class DocumentFormatter(mongoengine.base.BaseDocument):
         )
 
 
-class BaseDocument(mongoengine.Document, DocumentFormatter):
+class BaseDocument(document.Document, DocumentFormatter):
     """An helper abstract class with common methods"""
 
     meta = {"abstract": True}
@@ -59,7 +59,7 @@ class BaseDocument(mongoengine.Document, DocumentFormatter):
         return self.id.generation_time
 
 
-class Ship(mongoengine.EmbeddedDocument, DocumentFormatter):
+class Ship(document.EmbeddedDocument, DocumentFormatter):
     """
     Embedded document (in Team) that represent a ship.
     Visible only to the owner.
@@ -205,7 +205,7 @@ class Team(BaseDocument):
         return self
 
     # dynamic data (save history)
-    ships = fields.EmbeddedDocumentListField("Ship", formatter=len)
+    ships = fields.EmbeddedDocumentListField(Ship, formatter=len)
 
     def append_ship(self, save=True, **ship_fields):
         """
@@ -222,7 +222,7 @@ class Team(BaseDocument):
         return ship
 
 
-class Route(mongoengine.EmbeddedDocument):
+class Route(document.EmbeddedDocument):
     """Represent a route from the parent system to `destination` of `distance`"""
 
     destination = fields.IntField(required=True, help="system_id")
@@ -238,20 +238,22 @@ class Route(mongoengine.EmbeddedDocument):
 class System(BaseDocument):
     """
     A System on the board.
+    Data is visible if you have ships in the system.
 
     Static params:
-    :system_id: the public id of the instance.
-    :name: the name of the system. Fluff.
-    :production: ships produced per time step.
-    :adjacent_systems: all possible routes (system_id & distance) from this system. Not public.
+    system_id: the public id of the instance.
+    name: the name of the system. Fluff.
+    production: ships produced per time step.
+    adjacent_systems: all possible routes (system_id & distance) from this system.
+                      visible if you control the system.
 
     Dynamic params:
-    :history: List of dict(action=., time=., ...)
-              Represent the changes that affected this instance
-    :controller: team_id of controlling team.
+    history: List of dict(action=., time=., ...)
+             Represent the changes that affected this instance
+    controller: team_id of controlling team.
 
     Dynamic params not in history:
-    :ships_in_system: aggregated count of ships.
+    ships_in_system: aggregated count of ships.
     """
 
     meta = {
