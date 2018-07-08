@@ -37,7 +37,10 @@ def get_app():
             System.objects(controller=Team.mongo_id(team_id=team_id)).distinct(
                 'system_id'
             )
-        ) | set(Team.objects(team_id=team_id).distinct('ships.location'))
+        ) | set(
+            ship.location
+            for ship in Team.objects.get(team_id=team_id).ships.filter(alive=True)
+        )
         return jsonify(
             [System.objects.get(system_id=s).to_dict(team_id) for s in system_ids]
         )
