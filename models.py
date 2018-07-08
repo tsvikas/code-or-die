@@ -341,22 +341,38 @@ class System(BaseDocument):
         return self
 
     # helper function
-    def to_dict(self, team_id=None, is_controller=None):
+    def to_dict(self, team_id=None, visibility=None):
         """
         convert the mongo document to a dict.
         adds the properties and shows only visible data
 
-        :param team_id: controls visibility - compares to system.controller
-        :param is_controller: overrides team_id visibility settings.
+        :param team_id: controls visibility
+               compares to system.controller and to team_ships
+        :param visibility: overrides team_id visibility settings.
+               'controller': view all data
+               'guest': view some data
+               False: view no data
         :return: dict(field: value)
         """
-        if is_controller is None:
-            is_controller = team_id is not None and self.controller == team_id
+        if visibility is None:
+            print(team_id)
+            if team_id is None:
+                visibility = False
+            elif self.controller == team_id:
+                visibility = "controller"
+            elif (
+                Team.objects.get(team_id=team_id)
+                .ships.filter(alive=True, location=self.system_id)
+                .count()
+            ):
+                visibility = "guest"
+        if not visibility:
+            return {}
         d = super().to_dict()
         for k in self._public_properties:
             d[k] = self.__getattribute__(k)
         keys = self._public_data + self._public_properties
-        if is_controller:
+        if visibility == "controller":
             keys.extend(self._controller_data)
         return {k: d[k] for k in keys}
 
@@ -394,7 +410,7 @@ if __name__ == "__main__":
     print(System.objects[0])
     print(System.objects[1])
     assert System.objects[0].ships_in_system == {2: 2, 3: 3}
-    print(System.objects[0].to_dict(is_controller=False))
+    print(System.objects[0].to_dict(visibility="guest"))
     print_history(System.objects[0].history)
 
     print(Team.objects[0])
