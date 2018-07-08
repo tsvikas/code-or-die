@@ -4,6 +4,8 @@ import secrets
 import mongoengine
 from mongoengine import document, fields
 
+from board import setup_board
+
 mongoengine.connect("code-or-die")
 
 # TODO: append -> push ?
@@ -433,22 +435,14 @@ class System(BaseDocument):
         return {k: d[k] for k in keys}
 
 
-if __name__ == "__main__":
-    from board import setup_board
-
-    def print_history(hist):
-        for h in hist:
-            h = dict(h)
-            print("{}: [{}] {}".format(h.pop("time"), h.pop("action"), h))
-        print()
-
+def setup_mock_game():
     systems_g = setup_board()
     System.setup_from_graph(systems_g)
 
     Team.drop_collection()
-    t1 = Team(name="red").save()
+    t1 = Team(name="red", token="AAAA").save()
     t2 = Team(name="blue").save()
-    t3 = Team(name="mars", token="AAAA").save()
+    t3 = Team(name="yellow").save()
     assert t2.token != t3.token
 
     ships = [t1.append_ship(location=2, save=False) for _ in range(3)]
@@ -463,9 +457,21 @@ if __name__ == "__main__":
     ships = [t3.append_ship(location=1, save=False) for _ in range(3)]
     t3.save()
 
+    assert System.objects[0].ships_in_system == {2: 2, 3: 3}
+
+
+if __name__ == "__main__":
+
+    def print_history(hist):
+        for h in hist:
+            h = dict(h)
+            print("{}: [{}] {}".format(h.pop("time"), h.pop("action"), h))
+        print()
+
+    setup_mock_game()
+
     print(System.objects[0])
     print(System.objects[1])
-    assert System.objects[0].ships_in_system == {2: 2, 3: 3}
     print(System.objects[0].to_dict(visibility="guest"))
     print_history(System.objects[0].history)
 

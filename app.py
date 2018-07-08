@@ -3,11 +3,12 @@ from functools import wraps
 import mongoengine
 from flask import Flask, request, jsonify
 
-from models import System, Team
+from models import System, Team, setup_mock_game
 
 
 def get_app():
     app = Flask(__name__)
+    setup_mock_game()
 
     def with_team_id(f):
         @wraps(f)
