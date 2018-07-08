@@ -1,8 +1,9 @@
 from functools import wraps
 
+import mongoengine
 from flask import Flask, request, jsonify
 
-from .models import System, Team
+from models import System, Team
 
 
 def get_app(db):
@@ -14,8 +15,7 @@ def get_app(db):
             token = request.args.get('token')
             try:
                 team = Team.objects.get(token=token)
-            except ValueError('?'):
-                # invalid token
+            except mongoengine.DoesNotExist:
                 return jsonify({'error': 'Invalid Team'}), 400
             else:
                 kwargs['team_id'] = team['team_id']
@@ -33,9 +33,9 @@ def get_app(db):
     def get_systems(team_id):
         """GET all systems currently controlled by team"""
         system_ids = set(
-            System.objects(controller=Team.mongo_id(team_id)).distinct('system_id')
+            System.objects(controller=Team.mongo_id(team_id=team_id)).distinct('system_id')
         ) | set(Team.objects(team_id=team_id).distinct('ships.location'))
-        return jsonify([s.to_dict(team_id) for s in system_ids])
+        return jsonify([System.objects.get(system_id=s).to_dict(team_id) for s in system_ids])
 
     @app.route('/systems/<int:system_id>/', methods=['GET'])
     @with_team_id
