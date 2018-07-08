@@ -6,7 +6,6 @@ from mongoengine import document, fields
 
 from board import setup_board
 
-mongoengine.connect("code-or-die")
 
 # TODO: append -> push ?
 # TODO: system_id -> reference ?
@@ -413,7 +412,6 @@ class System(BaseDocument):
         :return: dict(field: value)
         """
         if visibility is None:
-            print(team_id)
             if team_id is None:
                 visibility = False
             elif self.controller == team_id:
@@ -436,6 +434,8 @@ class System(BaseDocument):
 
 
 def setup_mock_game():
+    mongoengine.connect("code-or-die")
+
     systems_g = setup_board()
     System.setup_from_graph(systems_g)
 
