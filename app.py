@@ -6,7 +6,7 @@ from flask import Flask, request, jsonify
 from models import System, Team
 
 
-def get_app(db):
+def get_app():
     app = Flask(__name__)
 
     def with_team_id(f):
