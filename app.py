@@ -177,7 +177,7 @@ def get_app(db):
 
     @app.route('/systems/<int:system_id>/', methods=['GET'])
     @with_team_id
-    def get_system(system: str):
+    def get_system(system_id: int, team_id: int):
         """
         GET systems with given ID or name.
 
@@ -210,33 +210,33 @@ def get_app(db):
 
     @app.route('/systems/<int:system_id>/tuning', methods=['POST'])
     @with_team_id
-    def set_system_tuning(system: str):
+    def set_system_tuning(system_id: int):
         """PUT a new set of tuning parameters on an systems.
         Payload may indicate to use specific parameters or to generate random parameters."""
         pass
 
     @app.route('/systems/<int:system_id>/orders', methods=['GET'])
     @with_team_id
-    def get_system_orders(system: str):
+    def get_system_orders(system_id: int):
         """GET a controlled system's order queue."""
         pass
 
     @app.route('/systems/<int:system_id>/orders', methods=['PUT'])
     @with_team_id
-    def append_system_orders(system: str):
+    def append_system_orders(system_id: int):
         """PUT an order onto the end of a controlled systems's order queue.
         Returns failure if team does not control systems."""
         pass
 
     @app.route('/systems/<int:system_id>/orders', methods=['DELETE'])
     @with_team_id
-    def clear_system_orders(system: str):
+    def clear_system_orders(system_id: int):
         """DELETE (clear) all orders from systems's order queue."""
         pass
 
     @app.route('/systems/<int:system_id>/orders/<int:order>', methods=['DELETE'])
     @with_team_id
-    def delete_from_system_orders(system: str, order: int):
+    def delete_from_system_orders(system_id: int, order: int):
         """DELETE specified order from systems's order queue."""
         pass
 
@@ -246,15 +246,9 @@ def get_app(db):
         """GET all information for all units controlled by team."""
         pass
 
-    @app.route('/ships/names/', methods=['GET'])
-    @with_team_id
-    def get_ships_names():
-        """GET all convenience names for all ships."""
-        pass
-
     @app.route('/ships/<int:ship_id>', methods=['GET'])
     @with_team_id
-    def get_ship(ship: str):
+    def get_ship(ship_id: int):
         """
         GET all information for a given ship controlled by team.
         Information includes:
@@ -265,34 +259,27 @@ def get_app(db):
         * all messages sent to this ship
         """
 
-    @app.route('/ships/<int:ship_id>/name', methods=['PUT'])
-    @with_team_id
-    def set_ship_name(ship: str):
-        """PUT a convenience name on a ship.
-        Ship does not have to be active to be given a convenience name."""
-        pass
-
     @app.route('/ships/<int:ship_id>/orders', methods=['GET'])
     @with_team_id
-    def get_ship_orders(ship: str):
+    def get_ship_orders(ship_id: int):
         """GET ship's order queue."""
         pass
 
     @app.route('/ships/<int:ship_id>/orders', methods=['PUT'])
     @with_team_id
-    def append_ship_order(ship: str):
+    def append_ship_order(ship_id: int):
         """PUT a new order into at the end of a ship's order queue."""
         pass
 
     @app.route('/ships/<int:ship_id>/orders', methods=['DELETE'])
     @with_team_id
-    def clear_ship_orders(ship: str):
+    def clear_ship_orders(ship_id: int):
         """DELETE (clear) all orders from ship's order queue."""
         pass
 
     @app.route('/ships/<int:ship_id>/orders/<int:order>', methods=['DELETE'])
     @with_team_id
-    def remove_ship_order(ship: str, order: int):
+    def remove_ship_order(ship_id: int, order: int):
         """DELETE specified order from ship's order queue."""
         pass
 
