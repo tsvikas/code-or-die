@@ -9,6 +9,56 @@ mongoengine.connect("code-or-die")
 # TODO: append -> push ?
 # TODO: system_id -> reference ?
 
+# TODO: nore game_init:
+#     # add a beam for each system
+#     db['beams'].drop()
+#     db['beams'].insert_many(
+#         [dict(system_id=system_id, is_repair_mode=False) for system_id in systems_ids]
+#     )
+#
+#     # set random tuning for each beam
+#     db['tuning_params'].drop()
+#     for beam_id in beam_ids:
+#         db['tuning_params'].insert_one(
+#             dict(beam_id=beam_id, coord=random.randint(1, 2 ** 32))
+#         )
+#
+#     # populate teams into systems
+#     # creates new columns in teams & systems
+#     # TODO: Make sure players are distant!
+#     HOME_PLANET_PRODUCTION = 3
+#     for team_id, system_id in zip(
+#         get_column(teams), random.sample(systems_ids, k=teams.count())
+#     ):
+#         teams.update_one({'_id': team_id}, {'$set': dict(home_system=system_id)})
+#         systems.update_one(
+#             {'_id': system_id},
+#             {'$set': dict(controller_id=team_id, production=HOME_PLANET_PRODUCTION)},
+#         )
+#
+#     # set-up starting ships
+#     INITIAL_SHIPS = 5
+#     db['ships'].drop()
+#     for team_number, team_id in enumerate(get_column(teams)):
+#         system_id = teams.find_one({'_id': team_id})['home_system']
+#         db['ships'].insert_many(
+#             [
+#                 dict(
+#                     _id=team_number * INITIAL_SHIPS + i,
+#                     team_id=team_id,
+#                     src_system_id=system_id,
+#                     system_id=system_id,
+#                     destroyed=False,
+#                 )
+#                 for i in range(INITIAL_SHIPS)
+#             ]
+#         )
+#
+#     db['systems_names'].drop()
+#     db['ships_names'].drop()
+#     db['systems_orders'].drop()
+#     db['ships_orders'].drop()
+
 
 class DocumentFormatter(document.BaseDocument):
     """An helper abstract class to str() mongoengine documents"""
