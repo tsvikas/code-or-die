@@ -4,3 +4,4 @@ flask
 waitress
 pymongo
 requests
+mongoengine
