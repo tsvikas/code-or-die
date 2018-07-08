@@ -175,7 +175,7 @@ def get_app(db):
         """GET all convenience names for all systems."""
         pass
 
-    @app.route('/system/<string:system>/', methods=['GET'])
+    @app.route('/systems/<int:system_id>/', methods=['GET'])
     @with_team_id
     def get_system(system: str):
         """
@@ -201,40 +201,40 @@ def get_app(db):
           (TODO: include this or not? include transit history, too? how many ships transmitted and at what time?)
         """
 
-    @app.route('/system/<string:system>/name/', methods=['PUT'])
+    @app.route('/systems/<int:system_id>/name/', methods=['PUT'])
     @with_team_id
     def set_system_name(system: str):
         """PUT a convenience name on an systems.
         Team does not have to control an systems to give it a convenience name."""
         pass
 
-    @app.route('/system/<string:system>/tuning', methods=['POST'])
+    @app.route('/systems/<int:system_id>/tuning', methods=['POST'])
     @with_team_id
     def set_system_tuning(system: str):
         """PUT a new set of tuning parameters on an systems.
         Payload may indicate to use specific parameters or to generate random parameters."""
         pass
 
-    @app.route('/system/<string:system>/orders', methods=['GET'])
+    @app.route('/systems/<int:system_id>/orders', methods=['GET'])
     @with_team_id
     def get_system_orders(system: str):
         """GET a controlled system's order queue."""
         pass
 
-    @app.route('/system/<string:system>/orders', methods=['PUT'])
+    @app.route('/systems/<int:system_id>/orders', methods=['PUT'])
     @with_team_id
     def append_system_orders(system: str):
         """PUT an order onto the end of a controlled systems's order queue.
         Returns failure if team does not control systems."""
         pass
 
-    @app.route('/system/<string:system>/orders', methods=['DELETE'])
+    @app.route('/systems/<int:system_id>/orders', methods=['DELETE'])
     @with_team_id
     def clear_system_orders(system: str):
         """DELETE (clear) all orders from systems's order queue."""
         pass
 
-    @app.route('/system/<string:system>/orders/<int:order>', methods=['DELETE'])
+    @app.route('/systems/<int:system_id>/orders/<int:order>', methods=['DELETE'])
     @with_team_id
     def delete_from_system_orders(system: str, order: int):
         """DELETE specified order from systems's order queue."""
@@ -252,7 +252,7 @@ def get_app(db):
         """GET all convenience names for all ships."""
         pass
 
-    @app.route('/ship/<string:ship>', methods=['GET'])
+    @app.route('/ships/<int:ship_id>', methods=['GET'])
     @with_team_id
     def get_ship(ship: str):
         """
@@ -265,32 +265,32 @@ def get_app(db):
         * all messages sent to this ship
         """
 
-    @app.route('/ship/<string:ship>/name', methods=['PUT'])
+    @app.route('/ships/<int:ship_id>/name', methods=['PUT'])
     @with_team_id
     def set_ship_name(ship: str):
         """PUT a convenience name on a ship.
         Ship does not have to be active to be given a convenience name."""
         pass
 
-    @app.route('/ship/<string:ship>/orders', methods=['GET'])
+    @app.route('/ships/<int:ship_id>/orders', methods=['GET'])
     @with_team_id
     def get_ship_orders(ship: str):
         """GET ship's order queue."""
         pass
 
-    @app.route('/ship/<string:ship>/orders', methods=['PUT'])
+    @app.route('/ships/<int:ship_id>/orders', methods=['PUT'])
     @with_team_id
     def append_ship_order(ship: str):
         """PUT a new order into at the end of a ship's order queue."""
         pass
 
-    @app.route('/ship/<string:ship>/orders', methods=['DELETE'])
+    @app.route('/ships/<int:ship_id>/orders', methods=['DELETE'])
     @with_team_id
     def clear_ship_orders(ship: str):
         """DELETE (clear) all orders from ship's order queue."""
         pass
 
-    @app.route('/ship/<string:ship>/orders/<int:order>', methods=['DELETE'])
+    @app.route('/ships/<int:ship_id>/orders/<int:order>', methods=['DELETE'])
     @with_team_id
     def remove_ship_order(ship: str, order: int):
         """DELETE specified order from ship's order queue."""
