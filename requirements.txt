@@ -1,0 +1,6 @@
+networkx
+matplotlib
+waitress
+requests
+mongoengine
+Flask
