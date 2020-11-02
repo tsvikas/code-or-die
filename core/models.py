@@ -4,7 +4,7 @@ import secrets
 import mongoengine
 from mongoengine import document, fields
 
-from board import setup_board
+from core.board import setup_board
 
 
 # TODO: append -> push ?

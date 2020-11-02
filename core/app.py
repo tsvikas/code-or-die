@@ -3,7 +3,7 @@ from functools import wraps
 import mongoengine
 from flask import Flask, request, jsonify
 
-from models import System, Team, setup_mock_game
+from core.models import System, Team, setup_mock_game
 
 
 def get_app():

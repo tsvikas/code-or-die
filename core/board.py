@@ -8,7 +8,7 @@ import random
 
 import networkx as nx
 
-from stars import random_star_names
+from core.stars import random_star_names
 
 
 # set-up systems

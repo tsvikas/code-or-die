@@ -3,7 +3,7 @@ import sys
 
 import waitress
 
-from app import get_app
+from core.app import get_app
 
 
 if __name__ == '__main__':
